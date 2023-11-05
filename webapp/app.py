@@ -47,22 +47,22 @@ def index():
 
 def forecast_sarima(ppp_value):
     # Подключение к базе данных
-    conn = psycopg2.connect(host="localhost", database="infordb", user="infor", password="123")
-    data = pd.read_sql("SELECT * FROM Knal;", conn)
+    conn = psycopg2.connect(host="192.168.1.121", database="infordb", user="infor", password="123")
+    data = pd.read_sql("SELECT * FROM knal;", conn)  # Используйте нижний регистр для имени таблицы
     conn.close()
 
     # Прогнозирование с использованием SARIMA
-    endog_transformed, lambda_ = boxcox(data['Value'])
-    data['PPP_lag1'] = data['PPP'].shift(1)
-    data['PPP_lag12'] = data['PPP'].shift(12)
+    endog_transformed, lambda_ = boxcox(data['value'])  # Используйте нижний регистр для названия столбца
+    data['ppp_lag1'] = data['ppp'].shift(1)            # Используйте нижний регистр для названия столбцов
+    data['ppp_lag12'] = data['ppp'].shift(12)          # Используйте нижний регистр для названия столбцов
     data = data.dropna()
-    exog = data[['PPP', 'PPP_lag1', 'PPP_lag12']]
+    exog = data[['ppp', 'ppp_lag1', 'ppp_lag12']]      # Используйте нижний регистр для названия столбцов
     endog_transformed = endog_transformed[data.index]
 
     model = sm.tsa.statespace.SARIMAX(endog_transformed, exog=exog, order=(1,1,1), seasonal_order=(1,1,0,12))
     results = model.fit(disp=-1, method='nm', maxiter=100)
 
-    known_exog = np.array([[ppp_value, data['PPP'].iloc[-1], data['PPP'].iloc[-12]]])
+    known_exog = np.array([[ppp_value, data['ppp'].iloc[-1], data['ppp'].iloc[-12]]])
     forecast = results.get_forecast(steps=1, exog=known_exog)
     mean_forecast = forecast.predicted_mean
     mean_forecast = round(inv_boxcox(mean_forecast, lambda_).iloc[0], 5)
@@ -71,13 +71,13 @@ def forecast_sarima(ppp_value):
 
 def forecast_catboost(ppp_value):
     # Подключение к базе данных
-    conn = psycopg2.connect(host="localhost", database="infordb", user="infor", password="123")
-    data = pd.read_sql("SELECT * FROM Knal;", conn)
+    conn = psycopg2.connect(host="192.168.1.121", database="infordb", user="infor", password="123")
+    data = pd.read_sql("SELECT * FROM knal;", conn)  # Используйте нижний регистр для имени таблицы
     conn.close()
 
     # Прогнозирование с использованием CatBoost
-    X = data[['PPP']]
-    y = data['Value']
+    X = data[['ppp']]  # Используйте нижний регистр для названия столбцов
+    y = data['value']  # Используйте нижний регистр для названия столбца
 
     model = CatBoostRegressor(iterations=1000, learning_rate=0.1, depth=5, verbose=0)
     model.fit(X, y)

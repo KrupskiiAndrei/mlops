@@ -1,7 +1,12 @@
 [core]
-    remote = ssh-storage
+    remote = myremote
 ['remote "ssh-storage"']
     url = ssh://data-srv@192.168.1.121/opt/datasets
     password = 123
-    user = infor    
+    user = infor
     port = 22
+['remote "myremote"']
+    url = ssh://data-srv/opt/datasets
+    user = infor
+    port = 22
+    keyfile = /home/infor/.ssh/id_rsa
