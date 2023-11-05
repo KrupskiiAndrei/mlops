@@ -2,3 +2,8 @@ pandas
 openpyxl
 catboost
 scikit-learn
+flask
+numpy
+statsmodels
+scipy
+psycopg2-binary
