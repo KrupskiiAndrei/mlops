@@ -7,3 +7,4 @@ numpy
 statsmodels
 scipy
 psycopg2-binary
+SQLAlchemy

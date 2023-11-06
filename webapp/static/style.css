@@ -79,8 +79,9 @@ button:hover {
     }
 
     input, select, button {
-        width: 100%;
+        width: calc(100% - 20px); /* Вычитаем внутренние отступы */
         margin-top: 5px;
         margin-bottom: 5px;
+        box-sizing: border-box; /* Включаем padding и border в общую ширину */
     }
 }
