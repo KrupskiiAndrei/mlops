@@ -3,14 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Прогнозирование Кнал</title>
+    <title>Прогнозирование с учетом недопоставки</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <div style="text-align: center;">
-        <h2>Введите значение ППП</h2>
-        <form action="/" method="post">
-            <input type="text" name="ppp_value" value="{{ last_ppp_value }}" placeholder="Значение ППП">
+        <div>
+            <span>Введите значения недопоставки по ДПМ</span><br>
+            <span>(например, если недопоставка 3%, то введите 0.03)</span>
+        </div>
+        <form action="/index_2" method="post">
+            <input type="text" name="dpm_value" value="{{ last_dpm_value }}" placeholder="Значение ДПМ">
+            <br><br>
+        <div>
+            <span>Введите значения недопоставки по АЭС</span><br>
+        </div>
+            <input type="text" name="aes_value" value="{{ last_aes_value }}" placeholder="Значение АЭС">
             <br><br>
             <label>Выберите метод прогнозирования:</label>
             <select name="method">
@@ -18,10 +26,6 @@
                 <option value="catboost">CatBoost</option>
             </select>
             <br><br>
-            <input type="submit" value="Расчет без недопоставки">
-        </form>
-        <br>
-        <form action="/index_2" method="get">
             <input type="submit" value="Расчет с недопоставкой">
         </form>
         {% if message %}
