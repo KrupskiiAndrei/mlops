@@ -11,30 +11,23 @@ f_input = sys.argv[1]
 f_output = os.path.join("data", "stage3", "train.csv")
 os.makedirs(os.path.join("data", "stage3"), exist_ok=True)
 
+def text_to_numeric(arr):
+    # Пример функции для преобразования текстовых данных в числовые
+    # Заменяет 'male' на 1, 'female' на 0, это нужно заменить на вашу логику
+    return [1 if x == 'male' else 0 for x in arr]
+
 def process_data(fd_in, fd_out):
-    arr_survived = []
-    arr_pclass = []
-    arr_sex = []
-    arr_age = []
-
-    for line in fd_in:
-        line = line.rstrip('\n').split(',')
-        arr_survived.append(line[0])
-        arr_pclass.append(line[1])
-        arr_sex.append(line[2])
-        arr_age.append(line[3])
-
-    for i in range(len(arr_sex)):
-        if arr_sex[i] == 'male':
-            arr_sex[i] = 1
-        else:
-            arr_sex[i] = 0
-
-    for p_survived, p_pclass, p_sex, p_age in zip(arr_survived, arr_pclass, arr_sex, arr_age):
-        fd_out.write("{},{},{},{}\n".format(p_survived, p_pclass, p_sex, p_age))
+    # Считывание данных из файла и транспонирование списка для удобства обработки
+    data = list(zip(*(line.strip().split(',') for line in fd_in)))
+    
+    # Преобразование текстовых данных в числовые для всех столбцов
+    numeric_data = [text_to_numeric(column) if index != 0 else column
+                    for index, column in enumerate(data)]
+    
+    # Запись обработанных данных в файл
+    for row in zip(*numeric_data):
+        fd_out.write(",".join(map(str, row)) + "\n")
 
 with io.open(f_input, encoding="utf8") as fd_in:
     with io.open(f_output, "w", encoding="utf8") as fd_out:
         process_data(fd_in, fd_out)
-
-        
