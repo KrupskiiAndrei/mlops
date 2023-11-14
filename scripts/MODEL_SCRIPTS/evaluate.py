@@ -10,11 +10,14 @@ if len(sys.argv) != 3:
     sys.stderr.write("\tpython evaluate.py data-file model\n")
     sys.exit(1)
 
-df = pd.read_csv(sys.argv[1], header=None)
-X = df.iloc[:,[1,2,3]]
-y = df.iloc[:,0]
+f_input = sys.argv[1]
+f_model = sys.argv[2]
 
-with open(sys.argv[2], "rb") as fd:
+df = pd.read_csv(f_input, header=None)
+X = df.iloc[:, [1, 2, 3]]
+y = df.iloc[:, 0]
+
+with open(f_model, "rb") as fd:
     clf = pickle.load(fd)
 
 score = clf.score(X, y)

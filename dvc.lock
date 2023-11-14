@@ -43,11 +43,31 @@ stages:
       size: 6736
     - path: scripts/DATA_SCRIPTS/change_text_to_numeric.py
       hash: md5
-      md5: a2a1c801b9e2b9835555d9c52c105eca
-      size: 1455
+      md5: 316c2369c60a06c5919f1ad5111de015
+      size: 1456
     outs:
     - path: data/stage3
       hash: md5
       md5: e8407af6c91635c8fdbefa4e556f4b6a.dir
       size: 2275
       nfiles: 1
+  split:
+    cmd: python3 scripts/DATA_SCRIPTS/train_test_split.py data/stage3/train.csv
+    deps:
+    - path: data/stage3/train.csv
+      hash: md5
+      md5: a9a868f9f03b494b317c246796898e94
+      size: 2275
+    - path: scripts/DATA_SCRIPTS/train_test_split.py
+      hash: md5
+      md5: b55bfce591dc009340ff13b7462e9af3
+      size: 959
+    params:
+      params.yaml:
+        split.split_ratio: 0.3
+    outs:
+    - path: data/stage4
+      hash: md5
+      md5: 279016e2fcd4f80ada086f5ea5e2db79.dir
+      size: 1530
+      nfiles: 2
