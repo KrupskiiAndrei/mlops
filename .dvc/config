@@ -2,7 +2,7 @@
     remote = myremote
 ['remote "ssh-storage"']
     url = ssh://data-srv@192.168.1.121/opt/datasets
-    password = 123
+    password = 1258
     user = infor
     port = 22
 ['remote "myremote"']
